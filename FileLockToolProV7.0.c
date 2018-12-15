@@ -11,23 +11,23 @@
 #define FALSE 0
 #define WORD char
 #define FILEINFO "LoadFile.txt"
-//¶ÔÎÄ¼şÃû¡°FileName¡±ÓÃ¡°password¡±½øĞĞ¡°mode¡±²Ù×÷£¬modeÎªlockÊ±½øĞĞ¼ÓÃÜ£¬modeÎªunlockÊ±½øĞĞ½âÃÜ,·µ»ØÖµ1³É¹¦£¬0½âÃÜÃÜÂë²»ÕıÈ·£¬-1ÎÄ¼şÎ´¼ÓÃÜ²»ÄÜÖ´ĞĞ½âÃÜ
+//å¯¹æ–‡ä»¶åâ€œFileNameâ€ç”¨â€œpasswordâ€è¿›è¡Œâ€œmodeâ€æ“ä½œï¼Œmodeä¸ºlockæ—¶è¿›è¡ŒåŠ å¯†ï¼Œmodeä¸ºunlockæ—¶è¿›è¡Œè§£å¯†,è¿”å›å€¼1æˆåŠŸï¼Œ0è§£å¯†å¯†ç ä¸æ­£ç¡®ï¼Œ-1æ–‡ä»¶æœªåŠ å¯†ä¸èƒ½æ‰§è¡Œè§£å¯†
 int FileLocker(char * FileName,char * password,char * mode);
-//Ñ¡Ôñ²Ëµ¥
+//é€‰æ‹©èœå•
 char SelectMain();
-//¿ØÖÆ·Ö¹ÜÖĞĞÄ
+//æ§åˆ¶åˆ†ç®¡ä¸­å¿ƒ
 void ControlCenter(int num,char * string[]);
-//·µ»Øµ±Ç°Ê±¼äĞÅÏ¢£¬modeÖµ0ÈÕÆÚ£¬1Ê±¼ä£¬2ĞÇÆÚ
+//è¿”å›å½“å‰æ—¶é—´ä¿¡æ¯ï¼Œmodeå€¼0æ—¥æœŸï¼Œ1æ—¶é—´ï¼Œ2æ˜ŸæœŸ
 int PresentDATE(int mode);
-//¿ìËÙÉèÖÃ³ÌĞò´°¿ÚÑÕÉ«±êÌâ£¬¿í¶È£¬¸ß¶È
+//å¿«é€Ÿè®¾ç½®ç¨‹åºçª—å£é¢œè‰²æ ‡é¢˜ï¼Œå®½åº¦ï¼Œé«˜åº¦
 void FaceInt(char * color,char * title,int cols,int lines);
-//ÓÃ»§°ïÖú»òÒıµ¼ËµÃ÷
+//ç”¨æˆ·å¸®åŠ©æˆ–å¼•å¯¼è¯´æ˜
 void UserGuid();
-//ÔØÈëÎÄ¼ş¹ı¶àÌáÊ¾
+//è½½å…¥æ–‡ä»¶è¿‡å¤šæç¤º
 void AceptMore();
-//ÄÚ²¿ÃØÔ¿¼ÓÃÜ½âÃÜÎÄ±¾
+//å†…éƒ¨ç§˜é’¥åŠ å¯†è§£å¯†æ–‡æœ¬
 void InLock(char * string);
-//´ÓÎÄ¼ş¶ÁÈ¡ĞÅÏ¢
+//ä»æ–‡ä»¶è¯»å–ä¿¡æ¯
 void FromFileReadInfo();
 
 int main(int num,char * string[])
@@ -40,7 +40,7 @@ int main(int num,char * string[])
     else if(num>507)
     {
         AceptMore();
-        printf("Èç¹ûĞèÒª¼ÌĞø¼ÓÃÜ/½âÃÜ506¸ö£¬ÇëÊäÈë \'+\' £¬·ñÔò²»²Ù×÷£º\n>/  ");
+        printf("å¦‚æœéœ€è¦ç»§ç»­åŠ å¯†/è§£å¯†506ä¸ªï¼Œè¯·è¾“å…¥ \'+\' ï¼Œå¦åˆ™ä¸æ“ä½œï¼š\n>/  ");
         char con=getch();
         if(con=='+')
             ControlCenter(507,&string[0]);
@@ -161,11 +161,11 @@ char SelectMain()
     do
     {
         printf("----------------------------------\n\n");
-        printf("\t1.ÎÄ¼ş¼ÓÃÜ\n\n");
-        printf("\t2.ÎÄ¼ş½âÃÜ\n\n");
-        printf("\t0.ÍË³ö³ÌĞò\n\n");
+        printf("\t1.æ–‡ä»¶åŠ å¯†\n\n");
+        printf("\t2.æ–‡ä»¶è§£å¯†\n\n");
+        printf("\t0.é€€å‡ºç¨‹åº\n\n");
         printf("----------------------------------\n\n");
-        printf("ÇëÑ¡Ôñ£º\n\n>/ ");
+        printf("è¯·é€‰æ‹©ï¼š\n\n>/ ");
         result=getch();
         if(result>='0' && result<='2')
             printf("%c\n",result);
@@ -191,18 +191,18 @@ void UserGuid()
     for(int i=0; i<5; i++)
     {
         system("cls");
-        printf("\n\tÊ¹ÓÃÒıµ¼¼°ËµÃ÷:\n\n");
-        printf("\tÇë½«´ı¼ÓÃÜ/½âÃÜÎÄ¼şÍÏ¶¯µ½³ÌĞòÍ¼±êÉÏÆô¶¯\t( ^_^)£¯\n");
-        printf("\t»òÕßÄúÒ²¿ÉÒÔ°Ñ´ı´¦ÀíÎÄ¼şÂ·¾¶ĞÅÏ¢·Åµ½ÎÄ¼şÖĞ: \"%s\"\n",FILEINFO);
-        printf("\t×¢Òâ£¬Â·¾¶ÓĞÎŞË«ÒıºÅ¶¼ĞĞ£¬µ«ÊÇ²»Òª¼ÓÁíÍâµÄ¶«Î÷¡£\n");
-        printf("\t¶øÇÒ£¬ĞĞÊ×µÚÒ»¸öÈç¹ûÊÇ#ºÅ½«»á±»·ÅÆú£¬²»´¦Àí¡£\n");
-        printf("\n\tTips:\tÇë²»ÒªĞŞ¸Ä±¾³ÌĞòÃû³Æ£¬ÒÔÃâ·¢Éú´íÎó\n\t³É¹¦²Ù×÷»á½«ÎÄ¼şµÈĞÅÏ¢±£´æÖÁ \"FileLockToolPro\\01A_FileLockToolInfo.txt\"\n");
-        printf("\t\t³É¹¦²Ù×÷ºóµÄÎÄ¼ş½«»á±£´æÖÁ¹¤×÷Ä¿Â¼ \"FileLockToolPro\\\"\n");
-        printf("\t\tË«»÷ÔËĞĞ½Å±¾¼´¿ÉÉ¾³ıÔ´ÎÄ¼ş£º\"01A_DeleteSourceFile.bat\"\n");
-        printf("\tÌØ±ğ×¢Òâ£º\n");
-        printf("\t\tÈç¹û¹¤×÷Ä¿Â¼ÏÂ´æÔÚÍ¬ÃûÎÄ¼ş£¬ÄÇÃ´¾ÉÎÄ¼ş½«»á±»¸²¸Ç£¡£¡\n");
+        printf("\n\tä½¿ç”¨å¼•å¯¼åŠè¯´æ˜:\n\n");
+        printf("\tè¯·å°†å¾…åŠ å¯†/è§£å¯†æ–‡ä»¶æ‹–åŠ¨åˆ°ç¨‹åºå›¾æ ‡ä¸Šå¯åŠ¨\t( ^_^)ï¼\n");
+        printf("\tæˆ–è€…æ‚¨ä¹Ÿå¯ä»¥æŠŠå¾…å¤„ç†æ–‡ä»¶è·¯å¾„ä¿¡æ¯æ”¾åˆ°æ–‡ä»¶ä¸­: \"%s\"\n",FILEINFO);
+        printf("\tæ³¨æ„ï¼Œè·¯å¾„æœ‰æ— åŒå¼•å·éƒ½è¡Œï¼Œä½†æ˜¯ä¸è¦åŠ å¦å¤–çš„ä¸œè¥¿ã€‚\n");
+        printf("\tè€Œä¸”ï¼Œè¡Œé¦–ç¬¬ä¸€ä¸ªå¦‚æœæ˜¯#å·å°†ä¼šè¢«æ”¾å¼ƒï¼Œä¸å¤„ç†ã€‚\n");
+        printf("\n\tTips:\n\tæˆåŠŸæ“ä½œä¼šå°†æ–‡ä»¶ç­‰ä¿¡æ¯ä¿å­˜è‡³ \"FileLockToolPro\\01A_FileLockToolInfo.txt\"\n");
+        printf("\t\tæˆåŠŸæ“ä½œåçš„æ–‡ä»¶å°†ä¼šä¿å­˜è‡³å·¥ä½œç›®å½• \"FileLockToolPro\\\"\n");
+        printf("\t\tåŒå‡»è¿è¡Œè„šæœ¬å³å¯åˆ é™¤æºæ–‡ä»¶ï¼š\"01A_DeleteSourceFile.bat\"\n");
+        printf("\tç‰¹åˆ«æ³¨æ„ï¼š\n");
+        printf("\t\tå¦‚æœå·¥ä½œç›®å½•ä¸‹å­˜åœ¨åŒåæ–‡ä»¶ï¼Œé‚£ä¹ˆæ—§æ–‡ä»¶å°†ä¼šè¢«è¦†ç›–ï¼ï¼\n");
         printf("\n\tName:\tFileLockToolProV7.0\n\n\tDev:\t Ice2Faith\n");
-        printf("\n\t%dÃëºó½«»á¹Ø±Õ³ÌĞò\t\t©d(£ş¨Œ£ş)Bye~Bye~\n\n",5-i);
+        printf("\n\t%dç§’åå°†ä¼šå…³é—­ç¨‹åº\t\tãƒ¾(ï¿£â–½ï¿£)Bye~Bye~\n\n",5-i);
         Sleep(1000);
     }
 }
@@ -211,8 +211,8 @@ void AceptMore()
     system("color cf");
     Sleep(30);
     system("color f5");
-    printf("\n\tÔãÁË¸ö¸âµÄ\t\t<(ToT)>\n\n\tÎÄ¼şÊıÁ¿³¬¹ı 506 ¸ö\t((((£»\"A\"))))\n\n");
-    printf("\n\t±ğÎÊÎÒÎªÊ²Ã´ÊÇ 506 ¸ö\t\t£¨£££­.£­£©\n\n\t¹íÖªµÀÎÒ¾­ÀúÁËÊ²Ã´\t(TwT') \n\n");
+    printf("\n\tç³Ÿäº†ä¸ªç³•çš„\t\t<(ToT)>\n\n\tæ–‡ä»¶æ•°é‡è¶…è¿‡ 506 ä¸ª\t((((ï¼›\"A\"))))\n\n");
+    printf("\n\tåˆ«é—®æˆ‘ä¸ºä»€ä¹ˆæ˜¯ 506 ä¸ª\t\tï¼ˆï¼ƒï¼.ï¼ï¼‰\n\n\té¬¼çŸ¥é“æˆ‘ç»å†äº†ä»€ä¹ˆ\t(TwT') \n\n");
     printf("\n\tName:\tFileLockToolProV7.0\n\n\tDev:\t Ice2Faith\n\n");
 }
 void FaceInt(char * color,char * title,int cols,int lines)
@@ -267,12 +267,12 @@ void ControlCenter(int num,char * string[])
         gets(password);
         if(!strlen(password))
         {
-            printf("ÄúÃ²ËÆÃ»ÓĞÊäÈëÃÜÂëÅ¶£¡ÇëÖØÊÔ£¡\t\t(-_-) zzz\n");
+            printf("æ‚¨è²Œä¼¼æ²¡æœ‰è¾“å…¥å¯†ç å“¦ï¼è¯·é‡è¯•ï¼\t\t(-_-) zzz\n");
             Sleep(800);
         }
     }
     while(!strlen(password));
-    printf("ÊäÈë \'*\' Éú³ÉÉ¾³ıÔ´ÎÄ¼ş½Å±¾£º01A_DeleteSourceFile.bat£¬·ñÔò²»Éú³É\n>/ ");
+    printf("è¾“å…¥ \'*\' ç”Ÿæˆåˆ é™¤æºæ–‡ä»¶è„šæœ¬ï¼š01A_DeleteSourceFile.batï¼Œå¦åˆ™ä¸ç”Ÿæˆ\n>/ ");
     del=getch();
     FILE * Bat;
     if(del=='*')
@@ -294,25 +294,25 @@ void ControlCenter(int num,char * string[])
     fputs("\n\n",Password);
     fputs("Operation log:\n\n",Password);
     strcat(password,title);
-    printf("ÊäÈë \'+\' ÆôÓÃÏêÏ¸½ø¶È£¬·ñÔòÄ¬ÈÏ");
+    printf("è¾“å…¥ \'+\' å¯ç”¨è¯¦ç»†è¿›åº¦ï¼Œå¦åˆ™é»˜è®¤");
     char cre=getch();
     system("cls");
-    printf("¼ÓÃÜ/½âÃÜÖĞ£¬ÇëÉÔºó..................\n");
-    printf("»·¾³³õÊ¼»¯...........................\n");
-    printf("½¨Á¢ÎÄ¼ş¼Ğ: FileLockToolPro\\..........\n");
+    printf("åŠ å¯†/è§£å¯†ä¸­ï¼Œè¯·ç¨å..................\n");
+    printf("ç¯å¢ƒåˆå§‹åŒ–...........................\n");
+    printf("å»ºç«‹æ–‡ä»¶å¤¹: FileLockToolPro\\..........\n");
     if(del=='*')
-        printf("´´½¨É¾³ı½Å±¾..........\n");
+        printf("åˆ›å»ºåˆ é™¤è„šæœ¬..........\n");
     if(cre=='+')
     {
         system("mode con lines=10 cols=80");
-        printf("\n\n´¦Àí½ø¶È£º\n");
+        printf("\n\nå¤„ç†è¿›åº¦ï¼š\n");
     }
     else
         system("mode con lines=7 cols=40");
     int pre=0,be=0,poi=0;
     for(int i=1,j; i<num; i++)
     {
-        //Çå¿ÕÊı×éÄÚÈİ
+        //æ¸…ç©ºæ•°ç»„å†…å®¹
         for(int b=0; b<400; b++)
         {
             if(name[b]!='\0')
@@ -320,18 +320,18 @@ void ControlCenter(int num,char * string[])
         }
         strcpy(File,string[i]);
         int len,dsp;
-        //Í³¼ÆÂ·¾¶³¤¶È
+        //ç»Ÿè®¡è·¯å¾„é•¿åº¦
         len=0;
         while(File[len]!='\0')
             len++;
-        //¼ÆËãÎÄ¼ş¼Ğ±êÊ¶·ûÎ»ÖÃ
+        //è®¡ç®—æ–‡ä»¶å¤¹æ ‡è¯†ç¬¦ä½ç½®
         dsp=0;
         while(File[len-dsp]!='\\')
         {
             dsp++;
         }
         dsp=len-dsp+1;
-        //¸´ÖÆÎÄ¼ş¼Ğ±êÊ¶·ûÒÔºóµÄºó×º½øÈ¥name
+        //å¤åˆ¶æ–‡ä»¶å¤¹æ ‡è¯†ç¬¦ä»¥åçš„åç¼€è¿›å»name
         j=0;
         while(File[dsp+j]!='\0')
         {
@@ -349,16 +349,16 @@ void ControlCenter(int num,char * string[])
             }
             continue;
         }
-        //¼ì²âÊÇ·ñÊÇÎÄ¼ş¼Ğ
+        //æ£€æµ‹æ˜¯å¦æ˜¯æ–‡ä»¶å¤¹
         if(fopen(File,"r")==NULL)
         {
             continue;
         }
-        //¿ªÊ¼½øĞĞ¼ÓÃÜ²Ù×÷
-        //É¾³ı¾ÉÎÄ¼ş
+        //å¼€å§‹è¿›è¡ŒåŠ å¯†æ“ä½œ
+        //åˆ é™¤æ—§æ–‡ä»¶
         sprintf(mind,"del -f -q \"FileLockToolPro\\%s\"\0",name);
         system(mind);
-        //½ø¶ÈÌõÄ£Ê½Ñ¡Ôñ
+        //è¿›åº¦æ¡æ¨¡å¼é€‰æ‹©
         if(cre=='+')
         {
             system("cls");
@@ -373,7 +373,7 @@ void ControlCenter(int num,char * string[])
             if(pre!=be)
             {
                 system("cls");
-                printf("\n´¦Àí½ø¶È£º");
+                printf("\nå¤„ç†è¿›åº¦ï¼š");
                 printf("\n\t--------------------\n\t");
                 for(int t=0; t<poi; t++)
                     printf(">");
