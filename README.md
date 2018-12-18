@@ -1,4 +1,8 @@
 # File Lock Tool
+# Date: 20181218
+# ver 7.1
+1.add input path from console window.
+2.support opposite path.
 # Date: 20181215
 # ver 7.0
 support load path from file be named LoadFile.txt.
