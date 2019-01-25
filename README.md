@@ -1,5 +1,13 @@
 # File Lock Tool
 # Date: 20181218
+
+# ver 8.0
+# 20190125
+1.sure work dir,default is "C:\FileLockTool".
+2.your lock or unlock file will save to here.
+3.you can modify default work dir on "C:\FileLockTool\UserPath\Path.xml",the second line.
+4.support dir lock opretion,well work.
+
 # ver 7.1
 1.add input path from console window.
 2.support opposite path.
