@@ -1,6 +1,7 @@
 # File Lock Tool
 # Date: 20181218
-
+# ver 8.0 20190126
+fix some problem and more help text.
 # ver 8.0
 # 20190125
 1.sure work dir,default is "C:\FileLockTool".
