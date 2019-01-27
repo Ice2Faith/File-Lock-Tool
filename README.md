@@ -3,6 +3,12 @@
 # ver 8.0 20190126
 fix some problem and more help text.
 # ver 8.0
+# 20190127
+1.modify your work path.
+2.log file more prefect.
+3.delete bat file more success.
+4.more modify of functions.
+
 # 20190125
 1.sure work dir,default is "C:\FileLockTool".
 2.your lock or unlock file will save to here.
