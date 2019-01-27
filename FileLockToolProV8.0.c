@@ -40,12 +40,16 @@ void DirLock(const char dirroute[],const char dirname[],const char preworkdir[],
 int GetFileAttri(const char fileroute[],char filename[],char fatherroute[]);
 //适配环境配置，传入保存用户路径的数组UserRoute
 void PathEnvinoment(char UserRoute[]);
-
+//改变环境配置
+void PathChange();
+//全局变量定义
+FILE * Password=NULL;    //信息脚本输出定义
+FILE * Bat=NULL;     //建立删除脚本
+char del='2';   //删除脚本需要标志
+char mind[2048]= {'\0'};    //system函数交互用，后面会递归，为防止内存占用
 int main(int num,char * string[])
 {
     FaceInt("f5","FileLockToolProV8.0 Dev: Ice2Faith Ver: 8.0",85);
-    char UserRoute[40]; //用来初始化运行工环境的数组，只保证传参没问题
-    PathEnvinoment(UserRoute);  //初始化环境
     if(num==1)  //未拖入文件启动进入引导
     {
         UserGuid();
@@ -60,10 +64,48 @@ int main(int num,char * string[])
     }
     else    //常规进行处理
         ControlCenter(num,&string[0]);
-    fflush(stdin);
-    printf("已完成，按任意键结束\n"); //处理完成提示
-    getch();
     return 0;
+}
+void PathChange()
+{
+    fflush(stdin);
+    char pathinfo[10][2048]=
+    {
+        {"FileLockTool Path\n"},
+        {"C:\\FileLockToolPro\n\0"},    //配置默认工作路径，以免发生错误
+        {"You can modify the path to second line.\n"},
+        {"Form here down you can free modify it.\n"},
+        {"-----------------------------------------\n"},
+    };
+    if(access("C:\\FileLockToolPro\\UserPath",F_OK)!=0)
+        system("md C:\\FileLockToolPro\\UserPath");
+    if(access("C:\\FileLockToolPro\\UserPath\\Path.xml",F_OK)==0)
+    {
+        FILE * RF=fopen("C:\\FileLockToolPro\\UserPath\\Path.xml","r");
+        fgets(pathinfo[9],2048,RF); //trash info
+        fgets(pathinfo[1],2048,RF);
+        fclose(RF);
+    }
+    printf(">>>当前环境：%s",pathinfo[1]);
+    printf("输入 * 修改环境，输入 # 恢复默认，否则跳过\n>/ ");
+    fflush(stdin);
+    char sel=getch();
+    if(sel=='*')
+    {
+        printf("请输入环境路径：例如：C:\\001\\002\n>/ ");
+        gets(pathinfo[1]);
+        strcat(pathinfo[1],"\n\0");
+    }
+    else if(sel=='#')
+    {
+        strcpy(pathinfo[1],"C:\\FileLockToolPro\n\0");
+    }
+
+    FILE * Path=fopen("C:\\FileLockToolPro\\UserPath\\Path.xml","w");
+    for(int i=0; pathinfo[i][0]; i++)
+        fputs(pathinfo[i],Path);
+    fclose(Path);
+    printf(">>>当前环境：%s",pathinfo[1]);
 }
 void InLock(char * string)
 {
@@ -207,6 +249,7 @@ void UserGuid()
     printf("\n\n");
     printf("\t1.\tload file info from \"%s\"\n\n",FILEINFO);
     printf("\t2.\tInput file info\n\n");
+    printf("\t3.\tModify Running Environment\n\n");
     printf("\tElse:\tView help\n\n");
     printf("\tplease select:\n\n\t>/ ");
     char sel='9';
@@ -222,7 +265,13 @@ void UserGuid()
         FromConsoleReadInfo();
         return;
     }
-
+    else if(sel=='3')
+    {
+        PathChange();
+        printf("\n环境已更改！任意键继续\n");
+        fflush(stdin);
+        getch();
+    }
     for(int i=0; i<5; i++)
     {
         system("cls");
@@ -253,7 +302,6 @@ void AceptMore()
 }
 void FaceInt(char * color,char * title,int cols)
 {
-    char mind[100];
     sprintf(mind,"color %s\0",color);
     system(mind);
     sprintf(mind,"title %s\0",title);
@@ -281,7 +329,6 @@ int PresentDATE(int mode)
 }
 void DirLock(const char dirroute[],const char dirname[],const char preworkdir[],const char password[],const char usersel)
 {
-    char mind[2048]= {'\0'};
     char workdir[2048]= {0};
     sprintf(workdir,"%s\\%s",preworkdir,dirname);   //建立新的工作路径
     if(access(workdir,F_OK)!=0) //如果文件夹不存在再创建
@@ -311,10 +358,19 @@ void DirLock(const char dirroute[],const char dirname[],const char preworkdir[],
             strcat(tmpname,predir.name);
             FILE * pf=fopen(tmpname,"r");
             GetFileAttri(tmpname,filename,fatherroute);
+            printf("正在处理>>> %s\n\n",tmpname);
             if(!pf) //如果是文件夹则递归操作
             {
                 fclose(pf);
                 DirLock(tmpname,filename,workdir,password,usersel);
+                fputs("Success Dir\t: >> ",Password);
+                fputs(tmpname,Password);
+                fputs("\n",Password);
+                if(del=='*')
+                {
+                    sprintf(mind,"rmdir -s -q -y \"%s\"\n\0",tmpname);
+                    fputs(mind,Bat);
+                }
             }
             else    //是文件则执行操作
             {
@@ -334,6 +390,14 @@ void DirLock(const char dirroute[],const char dirname[],const char preworkdir[],
                     }
                     sprintf(rename,"ren \"%s\\LockFile.tmp\" \"%s\"\0\0",workdir,filename); //重命名临时文件
                     system(rename);
+                    fputs("Success File\t: >> ",Password);
+                    fputs(tmpname,Password);
+                    fputs("\n",Password);
+                    if(del=='*')
+                    {
+                        sprintf(mind,"del -f -q \"%s\"\n\0",tmpname);
+                        fputs(mind,Bat);
+                    }
                 }
                 else
                 {
@@ -351,35 +415,20 @@ void DirLock(const char dirroute[],const char dirname[],const char preworkdir[],
 }
 void PathEnvinoment(char UserRoute[])
 {
-    char pathinfo[10][2048]=
-    {
-        {"FileLockTool Path\n"},
-        {"C:FileLockToolPro\n"},    //配置默认工作路径，以免发生错误
-        {"You can modify the path to second line.\n"},
-        {"Form here down you can free modify it.\n"},
-        {"-----------------------------------------\n"},
-    };
+    char pathinfo[10][2048]= {0};
     FILE * Path=fopen("C:\\FileLockToolPro\\UserPath\\Path.xml","r");   //写入配置文件，如果不存在则建立，存在则读取
-    if(!Path)
-    {
-        fclose(Path);
-        system("md C:\\FileLockToolPro\\UserPath");
-        Path=fopen("C:\\FileLockToolPro\\UserPath\\Path.xml","w");
-        for(int i=0; pathinfo[i][0]; i++)
-            fputs(pathinfo[i],Path);
-    }
-    else
-    {
-        for(int i=0; i<5; i++)
-            fgets(pathinfo[i],2048,Path);
-    }
+
+    for(int i=0; i<5; i++)
+        fgets(pathinfo[i],2048,Path);
+
     pathinfo[1][strlen(pathinfo[1])-1]='\0';
     strcpy(UserRoute,pathinfo[1]);  //返回得到的配置路径
     fclose(Path);
 }
 void ControlCenter(int num,char * string[])
 {
-    char UserRoute[2048]= {"C:FileLockToolPro"};
+    PathChange();
+    char UserRoute[2048]= {"C:\\FileLockToolPro"};
     PathEnvinoment(UserRoute);  //获取工作路径
     char usersel=SelectMain();  //获取用户选择
     if(usersel=='0')    //选择退出则退出
@@ -393,7 +442,6 @@ void ControlCenter(int num,char * string[])
     {
         sprintf(workdir,"%s\\MyUnlock\\\0",UserRoute);
     }
-    char mind[2048]= {'\0'};
     if(access(workdir,F_OK)!=0) //检查工作路径是否存在，不存在则建立
     {
         sprintf(mind,"md \"%s\"\0",workdir);
@@ -408,8 +456,7 @@ void ControlCenter(int num,char * string[])
     char password[400]= {'\0'};
     char rename[4096];
     char title[20]= {"Ice2Faith\0"};
-    char del='2';   //删除脚本需要标志
-    FILE * Password;    //信息脚本输出定义
+
     char routeinfo[2048]= {0};
     sprintf(routeinfo,"%s01A_FileLockToolInfo.txt\0",workdir);
     Password=fopen(routeinfo,"a");
@@ -428,7 +475,7 @@ void ControlCenter(int num,char * string[])
     while(!strlen(password));
     printf("输入 \'*\' 生成删除源文件脚本：01A_DeleteSourceFile.bat，否则不生成\n>/ ");
     del=getch();
-    FILE * Bat;     //建立删除脚本
+
     if(del=='*')
     {
         //输出必要的提示和版本信息
@@ -451,25 +498,18 @@ void ControlCenter(int num,char * string[])
     fputs("\n\n",Password);
     fputs("Operation log:\n\n",Password);
     strcat(password,title); //强化密码
-    printf("输入 \'+\' 启用详细进度，否则默认");
-    char cre=getch();   //进度展示模式标记
     system("cls");
     printf("加密/解密中，请稍后..................\n");
     printf("环境初始化...........................\n");
     printf("建立文件夹: %sFileLockToolPro\\..........\n",workdir);
     if(del=='*')
         printf("创建删除脚本..........\n");
-    if(cre=='+')
-    {
-        system("mode con lines=10 cols=80");
-        printf("\n\n处理进度：\n");
-    }
-    else
-        system("mode con lines=7 cols=40");
+    long timea=time(NULL);
     int pre=0,be=0,poi=0;   //进度百分比控制变量
     for(int i=1; i<num; i++)
     {
         isfile=GetFileAttri(string[i],filename,fatherroute);
+        printf("\n正在处理>>> %s\n\n",string[i]);
         //判断文件路径性质，提示用户
         if(access(workdir,F_OK)!=0)
         {
@@ -479,9 +519,9 @@ void ControlCenter(int num,char * string[])
         else
         {
             if(isfile)
-                printf("\n文件处理中，请不要关闭程序...\n");
+                printf("\n文件处理中，请不要关闭程序...\n\n");
             else
-                printf("\n文件夹处理中，请不要关闭程序...\n");
+                printf("\n文件夹处理中，请不要关闭程序...\n\n");
         }
 
         if(!isfile)
@@ -536,30 +576,10 @@ void ControlCenter(int num,char * string[])
                 system("color f5");
             }
         }
-        //进度条模式选择
-        if(cre=='+')
-        {
-            system("cls");
-            printf("Processing:\n\n>/ %s\n\n\t%.2lf %%\n",string[i],(((double)(i+1)/(double)num)*100));
-        }
-        else
-        {
-            pre=(int)(((double)(i+1)/(double)num)*100);
-            if(pre>100)
-                pre=100;
-            poi=pre/5;
-            if(pre!=be)
-            {
-                system("cls");
-                printf("\n处理进度：");
-                printf("\n\t--------------------\n\t");
-                for(int t=0; t<poi; t++)
-                    printf(">");
-                printf("\t%d %%\n",pre);
-                printf("\t--------------------\n");
-                be=pre;
-            }
-        }
+        //进度条展示
+        system("cls");
+        printf("已完成:\n\n>/ %s\n\n\t%.2lf %%\n",string[i],(((double)(i+1)/(double)num)*100));
+
     }
     //处理配置文件、脚本善后
     if(del=='*')
@@ -571,6 +591,19 @@ void ControlCenter(int num,char * string[])
     }
     fputs("\n\n",Password);
     fclose(Password);
+    fflush(stdin);
+    long timeb=time(NULL);
+    long timec=timeb-timea;
+    long hour,minus,sec;
+    hour=timec/3600;
+    minus=(timec%3600)/60;
+    sec=((timec%3600)%60);
+    printf("\n耗时：%d h %d m %d s\n\n",hour,minus,sec);
+    printf("已完成，按任意键结束\n\n"); //处理完成提示
+    system("color 1f");
+    Sleep(60);
+    system("color f5");
+    getch();
 }
 int GetFileAttri(const char fileroute[],char filename[],char fatherroute[])
 {
