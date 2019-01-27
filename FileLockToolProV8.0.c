@@ -362,10 +362,10 @@ void DirLock(const char dirroute[],const char dirname[],const char preworkdir[],
             if(!pf) //如果是文件夹则递归操作
             {
                 fclose(pf);
-                DirLock(tmpname,filename,workdir,password,usersel);
                 fputs("Success Dir\t: >> ",Password);
                 fputs(tmpname,Password);
                 fputs("\n",Password);
+                DirLock(tmpname,filename,workdir,password,usersel);
                 if(del=='*')
                 {
                     sprintf(mind,"rmdir -s -q -y \"%s\"\n\0",tmpname);
@@ -527,10 +527,10 @@ void ControlCenter(int num,char * string[])
         if(!isfile)
         {
             //文件夹处理加密
-            DirLock(string[i],filename,workdir,password,usersel);
             fputs("Success Dir\t: >> ",Password);
             fputs(string[i],Password);
             fputs("\n",Password);
+            DirLock(string[i],filename,workdir,password,usersel);
             if(del=='*')
             {
                 sprintf(mind,"rmdir -s -q -y \"%s\"\n\0",string[i]);
