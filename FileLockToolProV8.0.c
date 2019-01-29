@@ -49,6 +49,7 @@ char del='2';   //删除脚本需要标志
 char mind[2048]= {'\0'};    //system函数交互用，后面会递归，为防止内存占用
 int main(int num,char * string[])
 {
+    rename(string[0],"FileLockToolProV8.0.exe");
     FaceInt("f5","FileLockToolProV8.0 Dev: Ice2Faith Ver: 8.0",85);
     if(num==1)  //未拖入文件启动进入引导
     {
